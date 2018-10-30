@@ -12,10 +12,10 @@ class Cell:
     self.south = random.uniform(-1,1)
     self.north = random.uniform(-1,1)
 
-# Grid matrix, globale variable
+# Grid matrix, global variable
 grid = []
-map_length = 0
-map_height = 0
+map_length = 8
+map_height = 8
 epsilon = 0.1
 learning_rate = 0.5
 discounting_factor = 0.9
