@@ -43,9 +43,9 @@ class Cell:
 grid = []
 map_length = 8
 map_height = 8
-epsilon = 0.05
-learning_rate = 0.05
-discounting_factor = 1
+epsilon = 0
+learning_rate = 0.1
+discounting_factor = 0.99
 
 # Map of given parameters.
 class Map:
@@ -192,13 +192,16 @@ def checking_map():
 # Build a q-value look up dictionary.
 # Random initialise the q-value table.
 # E.g. print(grid[2][1].east)
-def sarsa():
+def q_learning():
     # Cumulate the terminal state positions for all runs
     terminal_at_treasure = 0
     terminal_at_end = 0
 
     # For each episode
-    for episode in range(100000):
+    for episode in range(10000):
+
+        # print('Episode %i'%episode)
+
         # Initialise the start state.
         start_x = random.randint(0,7)
         start_y = random.randint(0,7)
@@ -217,20 +220,21 @@ def sarsa():
         elif grid[next_x][next_x].type == "terminate":
             continue
 
-        # Choose an action a from given policy, here is the e-greedy policy
-        action = e_greedy_action(start_x,start_y)
-        # print(action)
-
         step = 0
         # For each episode step, only stops if the agent reached the treasure or terminate.
         while grid[next_x][next_y].type != "terminate" and grid[next_x][next_y].type !="treasure":
+
+            # Choose an action a from given policy, here is the e-greedy policy
+            action = e_greedy_action(next_x, next_y)
+            # print(action)
+
             # print("Step {}: {}. (x,y)=({},{})".format(step, action, next_x, next_y))
             step+=1
             adjust = calculate_adjustment(action)
             outofbound = check_out_of_bound(next_x+adjust[0],next_y+adjust[1])
             if outofbound:
                 # Perform the action and observe the r and s'
-                action_reward = -20
+                action_reward = -10
                 current_state = grid[next_x][next_y]
                 next_state = grid[next_x][next_y]
                 # Choose a' from s' using policy derive from Q
@@ -308,22 +312,15 @@ def sarsa():
         # print("Terminate at the end {} times.".format(terminal_at_end))
         # print("Terminate at the treasure {} times.".format(terminal_at_treasure))
     # Print the map for checking
-        if episode == 98 or episode == 1000 or episode == 10000 or episode == 50000 or episode == 100000-1:
-            if episode == 98:
-                print('Episode 100')
-            elif episode == 99999:
-                print('Episode 100000')
-            else:
-                print('Episode %i' % episode)
-            for row in range(map_height):
-                for column in range(map_length):
-                    optimal_action = greedy_action(column, row)
-                    print(optimal_action,end = ' ')
-                print('')
+    for row in range(map_height):
+        for column in range(map_length):
+            optimal_action = greedy_action(column, row)
+            print(optimal_action,end = ' ')
+        print('')
 
 
 def main():
-    sarsa()
+    q_learning()
 
 if __name__ =="__main__":
     main()
