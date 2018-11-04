@@ -1,5 +1,9 @@
 """Find optimal policy in a grid world using SARSA algorithm.
 
+Author: Liang Huang
+Date: 04/Nov/2018
+Email: huangliang0826@icloud.com
+
 This script allows the user to calculate the optimal policy given a
 grid world map.
 
